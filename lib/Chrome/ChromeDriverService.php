@@ -3,6 +3,7 @@
 namespace Facebook\WebDriver\Chrome;
 
 use Facebook\WebDriver\Remote\Service\DriverService;
+use function array_merge;
 
 class ChromeDriverService extends DriverService
 {
@@ -17,11 +18,20 @@ class ChromeDriverService extends DriverService
     /**
      * @return static
      */
-    public static function createDefaultService()
+    public static function createDefaultService($exe = null, $port = null, $args =array() )
     {
-        $exe = getenv(self::CHROME_DRIVER_EXECUTABLE) ?: getenv(self::CHROME_DRIVER_EXE_PROPERTY);
-        $port = 9515; // TODO: Get another port if the default port is used.
-        $args = ['--port=' . $port];
+
+
+        $exe = ( $exe != null) ? $exe : getenv(self::CHROME_DRIVER_EXE_PROPERTY);
+        $port =  ($port != null) ? $port : 9515; // TODO: Get another port if the default port is used.
+        if(is_array($args) && count($args) >0 ) {
+            $args = $args; }
+        elseif ($args != null ) {
+            $args = [$args];
+        }
+
+        $arguments = $args + ['--port=' . $port];
+
 
         return new static($exe, $port, $args);
     }
