@@ -47,7 +47,7 @@ class DriverCommandExecutor extends HttpCommandExecutor
             return $value;
         } catch (\Exception $e) {
             if (!$this->service->isRunning()) {
-                throw new WebDriverException('The driver server has died.');
+                throw new WebDriverException( $e->getMessage() . ' The driver server has died.');
             }
             throw $e;
         }
